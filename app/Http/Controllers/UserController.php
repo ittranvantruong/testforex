@@ -104,24 +104,28 @@ class UserController extends Controller
         // $signals = Signal::whereIn('user_id', $user)->get();
         // $user = User::lazy();
         Debugbar::measure('Thoi gian xu ly', function() {
-            $order_tag = 'tag1';
             // Signal::chunkById(200, function ($flights) {
             //     $flights->each->update(['tag' => 'tag'.rand(1, 6)]);
             // }, $column = 'id');
-            $users = User::where('win_rate', '>=', 30)
-            ->orderBy('win_rate', 'DESC')
-            ->lazy(10);
-            $collect = Collection::make();
-            $count = 0;
-            foreach($users as $user){
-                $signals = $user->signals()->latest('id')->get();
-                $count ++;
-                $collect = $collect->merge($signals);
-                if($collect->count() > 10){
-                    $collect = $collect->slice(0, 10);
-                    break;
-                }
-            }
+            // $users = User::where('win_rate', '>=', 30)
+            // ->orderBy('win_rate', 'DESC')
+            // ->lazy(10);
+
+            // $collect = Collection::make();
+            // foreach($users as $user){
+            //     $signals = $user->signals()->latest('id')->limit(10)->get();
+            //     $collect = $collect->merge($signals);
+            //     // dd($collect->count());
+            //     if($collect->count() >= 10){
+            //         $collect = $collect->slice(0, 10);
+            //         break;
+            //     }
+            // }
+            $user = User::find(3);
+            $posts = Signal::whereBelongsTo($user)->get();
+            // dd($signals);
+            // dd($signals);
+            // dd($users->toArray());
             // dd($count);
             // $signals = Signal::select('id', 'title')->latest('id')->whereIn('user_id', $user)->get();
             // dd($signals->toArray());
