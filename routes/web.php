@@ -17,7 +17,10 @@ use App\Http\Controllers\UserController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/user', [UserController::class, 'index']);
-Route::get('/user/create', [UserController::class, 'create']);
-Route::get('/user/register-master', [UserController::class, 'registerMaster']);
-Route::get('/user/signal', [UserController::class, 'signals']);
+Route::controller(UserController::class)->middleware(['throttle:test'])->prefix('user')->as('user')->group(function(){
+    Route::get('/user', 'index');
+    Route::get('/user/create', 'create');
+    Route::get('/user/register-master', 'registerMaster');
+    Route::get('/user/signal', 'signals');
+});
+

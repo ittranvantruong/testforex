@@ -103,12 +103,12 @@ class UserController extends Controller
         // $user = User::find(7)->followings()->where('win_rate', '>=', 30)->pluck('id');
         // $signals = Signal::whereIn('user_id', $user)->get();
         // $user = User::lazy();
+        // dd(auth()->check());
         Debugbar::measure('Thoi gian xu ly', function() {
-            $order_tag = 'tag1';
             // Signal::chunkById(200, function ($flights) {
             //     $flights->each->update(['tag' => 'tag'.rand(1, 6)]);
             // }, $column = 'id');
-            $users = User::where('win_rate', '>=', 30)
+            $users = User::select('id')->where('win_rate', '>=', 30)
             ->orderBy('win_rate', 'DESC')
             ->lazy(10);
             $collect = Collection::make();
