@@ -17,10 +17,13 @@ use App\Http\Controllers\UserController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::controller(UserController::class)->middleware(['throttle:test'])->prefix('user')->as('user')->group(function(){
+Route::controller(UserController::class)->middleware(['throttle:test'])->prefix('/user')->as('user')->group(function(){
     Route::get('/user', 'index');
     Route::get('/user/create', 'create');
     Route::get('/user/register-master', 'registerMaster');
     Route::get('/user/signal', 'signals');
+    Route::get('/test-lock', 'testLock');
+    Route::get('/test-lock-2', 'testLock2');
+    Route::get('/test-lock-3', 'testLock3');
 });
 

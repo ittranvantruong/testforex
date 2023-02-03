@@ -10,6 +10,7 @@ use App\Models\Signal;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Support\Collection;
+use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
@@ -137,5 +138,57 @@ class UserController extends Controller
         // $user->fill(['vip1' => 2]);
         // dd($user->followings[0]->info->toArray());
         return view('index');
+    }
+
+    public function testLock(){
+        try{
+            DB::beginTransaction();
+            $user = User::whereId(3)->lockForUpdate()->first();
+            $user->update([
+                'password' => '123213213'
+            ]);
+            sleep(10);
+            dd($user);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+    }
+    public function testLock2(){
+        try{
+            DB::beginTransaction();
+
+            $user = User::whereId(3)->lockForUpdate()->first();
+            $user->update([
+                'password' => '45454545'
+            ]);
+            dd($user);
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+    }
+    public function testLock3(){
+        $user = User::whereId(3)->first();
+        dd($user);
+    }
+    
+    //"read committed" isolation leve
+    public function testLock4(){
+        try {
+            DB::beginTransaction(
+                'read committed'
+            );
+        
+            // Thực hiện các thao tác trên cơ sở dữ liệu
+            // ...
+        
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Xử lý exception
+            // ...
+        }
     }
 }
